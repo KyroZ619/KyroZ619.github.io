@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<body style="background:#fff;margin:10px;font:12px monospace">
+<div id="o" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+<script src="../js/pixel-kyro.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const z = +(q.get('z') || 4), only = q.get('pose');
+const o = document.getElementById('o');
+for (const [k, p] of Object.entries(PixelKyro.poses)) {
+  if (only && !only.split(',').includes(k)) continue;
+  p.frames.forEach((f, i) => {
+    const d = document.createElement('div');
+    const c = document.createElement('canvas'); c.width = 64; c.height = 64;
+    c.style.cssText = `width:${64 * z}px;height:${64 * z}px;image-rendering:pixelated;background:#f3f0ea`;
+    PixelKyro.paint(c, k, i, q.has('blink'));
+    d.append(c, document.createTextNode(' ' + k + ' ' + i));
+    o.append(d);
+  });
+}
+</script>
