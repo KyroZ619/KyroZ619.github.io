@@ -32,7 +32,8 @@ window.SITE = {
         'Deployed by faculty to Raidar — a nonprofit music platform by MIT & Berklee — opening to students at both schools.'
       ],
       tools: ['Product design', 'User testing', 'Music copyright', 'Claude', 'Cursor', 'Vercel'],
-      link: { href: 'https://sessionledger.vercel.app/', label: 'open sessionledger.vercel.app ↗' }
+      link: { href: 'https://sessionledger.vercel.app/', label: 'open sessionledger.vercel.app ↗' },
+      embed: 'https://sessionledger.vercel.app/'
     },
     {
       id: 'go-for-show',
@@ -109,6 +110,24 @@ window.SITE = {
       ],
       outcome: ['Top 3 tutor in student satisfaction (first-cycle review)'],
       tools: ['Curriculum design', 'Coaching', 'Cross-cultural communication']
+    },
+    {
+      id: 'vinyl-to-value',
+      style: 'collage',
+      kicker: 'Music Rights · Bilingual Research',
+      title: 'From Vinyl to Value',
+      role: 'Researcher, translator & designer · English / Mandarin',
+      date: '2026.09',
+      hook: 'Translating and reorganizing music-copyright knowledge for Chinese-speaking creators and the Chinese music market.',
+      metric: { n: 'EN ⇄ ZH', l: 'bilingual copyright framework' },
+      context: 'Most music-rights material is written for US and European markets. Chinese-speaking creators often meet these ideas in fragments, without the context of their own market.',
+      did: [
+        'Translated and compiled copyright concepts from Music Industry Law coursework into a bilingual English / Mandarin study framework.',
+        'Re-explained them for the Chinese music-market context: tangible vs. intellectual property, and copyright as a “bundle of rights” where each right can be licensed on its own.',
+        'Designed it as annotated, shareable study notes rather than a textbook.'
+      ],
+      outcome: ['A bilingual reference that makes artist rights easier to understand across markets.', 'Feeds into how Kyro thinks about attribution and creative ownership in Session Ledger.'],
+      tools: ['Copyright', 'Translation', 'Bilingual writing', 'Information design']
     }
   ],
 
@@ -158,7 +177,7 @@ window.SITE = {
     about: ['headphones on, brain on ♪', 'jazz → R&B → C-pop → K-pop. no skips.', 'taught myself sax in one semester!'],
     work: ['business mode: ON', 'click a poster to open the case file!', 'numbers go up ↗'],
     tracklist: ['every job is a track ♫', 'side A: work. side B: school.', 'this one’s a banger →'],
-    lineup: ['now presenting… the lineup!', 'headliner: product thinking!', 'EN · Mandarin · Korean = triple album'],
+    lineup: ['now presenting… the lineup!', 'headliner: artist branding!', 'EN · Mandarin · Korean = triple album'],
     backstage: ['hire me? pretty please ♥', 'thanks for reading my diary!', 'say hi — I reply fast ✿'],
     travel: ['wheee!', 'coming!', 'wait for me!', 'next page →'],
     poke: ['hehe that tickles', 'boop!', 'I’m 64×64 pixels of hire-able', 'Berklee MB, class of 2028 ✶']

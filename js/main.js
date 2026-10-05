@@ -187,7 +187,6 @@
           <h3 class="pc-title">${esc(p.title)}</h3>
           <p class="pc-hook">${esc(p.hook)}</p>
           <span class="pc-metric"><b>${esc(p.metric.n)}</b>${esc(p.metric.l)}</span>
-          ${p.link ? `<a class="pc-link" href="${esc(p.link.href)}" target="_blank" rel="noopener">${esc(p.link.label)}</a>` : ''}
         </div>
         <button class="pc-hit" type="button" data-i="${i}" aria-label="Open case file: ${esc(p.title)}"></button>
       </article>`).join('');
@@ -218,13 +217,14 @@
       <h2 class="m-title" id="modalTitle">${esc(p.title)}</h2>
       <p class="m-role">${esc(p.role)}</p>
       <p>${esc(p.hook)}</p>
+      ${p.link ? `<p class="m-live"><a class="btn btn-y" href="${esc(p.link.href)}" target="_blank" rel="noopener">${esc(p.link.label)}</a></p>` : ''}
+      ${p.embed ? `<div class="m-embed"><div class="m-embed-bar"><i></i><i></i><i></i><span>${esc(p.embed.replace(/^https?:\/\//, '').replace(/\/$/, ''))}</span><b>live preview</b></div><iframe src="${esc(p.embed)}" title="${esc(p.title)} live preview" loading="lazy" referrerpolicy="no-referrer"></iframe></div>` : ''}
       <p class="m-h">the situation</p><p>${esc(p.context)}</p>
       <p class="m-h">what I did</p><ul class="m-list">${li(p.did)}</ul>
       <p class="m-h">what happened</p><ul class="m-list win">${li(p.outcome)}</ul>
       <p class="m-h">tools &amp; skills</p>
       <div class="m-tools">${p.tools.map((t, k) => `<span style="--r:${k % 2 ? 2 : -2}deg">${esc(t)}</span>`).join('')}</div>
       <div class="m-link cta-row">
-        ${p.link ? `<a class="btn btn-y" href="${esc(p.link.href)}" target="_blank" rel="noopener">${esc(p.link.label)}</a>` : ''}
         <button class="btn btn-w js-prev" type="button">← prev</button>
         <button class="btn btn-w js-next" type="button">next case →</button>
       </div>`;
