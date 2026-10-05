@@ -162,14 +162,14 @@
       <i class="dd" data-doodle="sparkle" data-color="white" data-fill="white" style="--x:76%;--y:66%;--w:9%"></i>
       <p class="cv-txt t2">45H+ · 10+ STUDENTS · TOP 3</p>`,
     collage: () => `
-      <div class="cols">${'copyright · master · publishing · sync · mechanicals · performance · PRO · split sheet · licence · 版权 · 母带 · 词曲 · bundle of rights · '.repeat(14)}</div>
+      <div class="cols">${'copyright · master · publishing · sync · mechanicals · performance · PRO · split sheet · licence · bundle of rights · '.repeat(14)}</div>
       <p class="cv-txt t1"><span class="collage" data-styles="11,4,6,2,0,1,13,10,2,8,9,3,5,4,12,7">WHO OWNS A SONG?</span></p>
       <svg class="bundle" viewBox="0 0 120 80" aria-hidden="true"><g filter="url(#crayon)" stroke-linecap="round">
         <path d="M10 70 L100 12" stroke="#8b4a2b" stroke-width="7"/><path d="M18 74 L108 20" stroke="#a15b33" stroke-width="7"/>
         <path d="M6 60 L96 4" stroke="#8b4a2b" stroke-width="7"/><path d="M22 78 L112 30" stroke="#6e3a20" stroke-width="7"/>
         <path d="M52 30 C 62 40, 66 48, 64 58" stroke="#f2382c" stroke-width="6" fill="none"/></g></svg>
       <p class="cv-txt t2">a bundle of sticks</p>
-      <p class="cv-txt cn">版权</p>`
+      <p class="cv-txt cn">©</p>`
   };
   const coverHTML = (p, i) => `<div class="cv cv-${p.style}">${COVERS[p.style](p, i)}<span class="cv-no">N°0${i + 1}</span></div>`;
 
@@ -187,6 +187,7 @@
           <h3 class="pc-title">${esc(p.title)}</h3>
           <p class="pc-hook">${esc(p.hook)}</p>
           <span class="pc-metric"><b>${esc(p.metric.n)}</b>${esc(p.metric.l)}</span>
+          ${p.link ? `<a class="pc-link" href="${esc(p.link.href)}" target="_blank" rel="noopener">${esc(p.link.label)}</a>` : ''}
         </div>
         <button class="pc-hit" type="button" data-i="${i}" aria-label="Open case file: ${esc(p.title)}"></button>
       </article>`).join('');
@@ -200,13 +201,15 @@
      CASE-FILE MODAL
      ------------------------------------------------------------------ */
   const modal = $('#modal');
-  let current = -1, lastFocus = null;
+  let current = -1, lastFocus = null, modalMode = 'case';
 
   function openCase(i) {
     const n = D.projects.length;
     i = (i + n) % n;
     const p = D.projects[i];
     current = i;
+    modalMode = 'case';
+    modal.classList.remove('song-mode');
     $('.modal-left', modal).innerHTML = `<div class="poster">${coverHTML(p, i)}</div>
       <div class="modal-metric"><b>${esc(p.metric.n)}</b><span>${esc(p.metric.l)}</span></div>`;
     const li = a => a.map(x => `<li>${esc(x)}</li>`).join('');
@@ -253,8 +256,8 @@
   document.addEventListener('keydown', e => {
     if (modal.hidden) return;
     if (e.key === 'Escape') closeCase();
-    if (e.key === 'ArrowRight') openCase(current + 1);
-    if (e.key === 'ArrowLeft') openCase(current - 1);
+    if (modalMode === 'case' && e.key === 'ArrowRight') openCase(current + 1);
+    if (modalMode === 'case' && e.key === 'ArrowLeft') openCase(current - 1);
     if (e.key === 'Tab') { // keep focus inside the open diary
       const f = $$('button, a[href]', modal);
       if (!f.length) return;
@@ -262,6 +265,115 @@
       else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
     }
   });
+
+
+  /* ------------------------------------------------------------------
+     ORIGINAL MUSIC — song cards, one shared audio player, story modal
+     ------------------------------------------------------------------ */
+  const Player = (() => {
+    const audio = new Audio();
+    audio.preload = 'none';
+    let currentId = null;
+    const fmt = t => (isFinite(t) ? `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}` : '0:00');
+    const views = () => $$(`.player[data-id="${currentId}"]`);
+    function paint() {
+      $$('.player').forEach(pl => {
+        const on = pl.dataset.id === currentId;
+        const playing = on && !audio.paused;
+        pl.classList.toggle('playing', playing);
+        $('.pl-btn', pl).textContent = playing ? '❚❚' : '▶';
+        $('.pl-btn', pl).setAttribute('aria-label', (playing ? 'Pause ' : 'Play ') + pl.dataset.title);
+        if (!on) { $('.pl-bar span', pl).style.width = '0%'; $('.pl-time', pl).textContent = pl.dataset.len || '0:00'; }
+      });
+    }
+    audio.addEventListener('timeupdate', () => views().forEach(pl => {
+      $('.pl-bar span', pl).style.width = (audio.duration ? (audio.currentTime / audio.duration) * 100 : 0) + '%';
+      $('.pl-time', pl).textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    }));
+    ['play', 'pause', 'ended'].forEach(ev => audio.addEventListener(ev, paint));
+    function toggle(song) {
+      if (currentId !== song.id) { currentId = song.id; audio.src = song.file; }
+      if (audio.paused) { audio.play().catch(() => {}); Buddy.say(pick(['♪ now playing: ' + song.title, 'turn it up!', 'I wrote this one ✿'])); }
+      else audio.pause();
+      paint();
+    }
+    function seek(song, ratio) {
+      if (currentId !== song.id) toggle(song);
+      const go = () => { if (audio.duration) audio.currentTime = ratio * audio.duration; };
+      if (audio.readyState >= 1) go(); else audio.addEventListener('loadedmetadata', go, { once: true });
+    }
+    document.addEventListener('click', e => {
+      const pl = e.target.closest('.player');
+      if (!pl) return;
+      const song = D.songs.find(x => x.id === pl.dataset.id);
+      if (e.target.closest('.pl-btn')) toggle(song);
+      else if (e.target.closest('.pl-bar')) {
+        const r = $('.pl-bar', pl).getBoundingClientRect();
+        seek(song, Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)));
+      }
+    });
+    // show each song's length before it plays
+    D.songs.forEach(song => {
+      const a = new Audio();
+      a.preload = 'metadata';
+      a.src = song.file;
+      a.addEventListener('loadedmetadata', () => {
+        $$(`.player[data-id="${song.id}"]`).forEach(pl => { pl.dataset.len = '0:00 / ' + fmt(a.duration); if (pl.dataset.id !== currentId) $('.pl-time', pl).textContent = pl.dataset.len; });
+      });
+    });
+    return { paint };
+  })();
+
+  const playerHTML = song => `
+    <div class="player" data-id="${song.id}" data-title="${esc(song.title)}">
+      <button class="pl-btn" type="button" aria-label="Play ${esc(song.title)}">▶</button>
+      <div class="pl-bar" role="presentation"><span></span></div>
+      <span class="pl-time">0:00</span>
+    </div>`;
+
+  function songs() {
+    const wrap = $('#songs');
+    if (!wrap || !D.songs) return;
+    wrap.innerHTML = D.songs.map((song, i) => `
+      <article class="song" data-reveal style="--r:${i % 2 ? 1.2 : -1.2}deg">
+        <span class="tape ${i % 2 ? 'tape-blue' : 'tape-pink'}"></span>
+        <div class="song-cover"><img src="${esc(song.cover)}" alt="Cover art for ${esc(song.title)}" loading="lazy"><span class="song-no">TRACK 0${i + 1}</span></div>
+        <div class="song-info">
+          <p class="pc-kick"><span>Original single</span><span>by Kyro</span></p>
+          <h3 class="song-title">${esc(song.title)}</h3>
+          <p class="song-tag">“${esc(song.tagline)}”</p>
+          ${playerHTML(song)}
+          <p class="song-credits">${song.credits.slice(0, 3).map(c => `<b>${esc(c[0])}</b> ${esc(c[1])}`).join(' · ')}</p>
+          <button class="btn btn-w song-open" type="button" data-i="${i}">read the story →</button>
+        </div>
+      </article>`).join('');
+    wrap.addEventListener('click', e => { const b = e.target.closest('.song-open'); if (b) openSong(+b.dataset.i); });
+  }
+
+  function openSong(i) {
+    const song = D.songs[i];
+    modalMode = 'song';
+    modal.classList.add('song-mode');
+    $('.modal-left', modal).innerHTML = `<div class="song-cover big"><img src="${esc(song.cover)}" alt="Cover art for ${esc(song.title)}"></div>${playerHTML(song)}`;
+    $('.modal-right', modal).innerHTML = `
+      <p class="m-kick">original single · track 0${i + 1}</p>
+      <h2 class="m-title" id="modalTitle">${esc(song.title)}</h2>
+      <p class="m-role">“${esc(song.tagline)}”</p>
+      <p class="m-h">the story</p>
+      ${song.story.map(p => `<p class="m-story">${esc(p)}</p>`).join('')}
+      <p class="m-h">credits</p>
+      <dl class="m-credits">${song.credits.map(c => `<dt>${esc(c[0])}</dt><dd>${esc(c[1])}</dd>`).join('')}</dl>
+      <div class="m-tools">${song.tags.map((t, k) => `<span style="--r:${k % 2 ? 2 : -2}deg">${esc(t)}</span>`).join('')}</div>`;
+    Player.paint();
+    $('.modal-right', modal).scrollTop = 0;
+    if (modal.hidden) {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => modal.classList.add('open'));
+      $('.modal-x', modal).focus({ preventScroll: true });
+    }
+  }
 
   /* ------------------------------------------------------------------
      PIXEL BUDDY — walks to each page and does that page's thing
@@ -467,6 +579,7 @@
   function contact() {
     $$('.js-mail').forEach(a => { a.href = 'mailto:' + D.email; });
     $$('.js-linkedin').forEach(a => { if (D.linkedin) a.href = D.linkedin; else a.remove(); });
+    $$('.js-instagram').forEach(a => { a.href = D.instagram; });
     $$('.js-resume').forEach(a => { a.href = D.resume; });
     $$('.js-copy-email').forEach(b => b.addEventListener('click', () => {
       const done = () => { toast('copied! ✿ ' + D.email); $$('.js-email-text').forEach(s => { s.textContent = D.email; }); };
@@ -540,6 +653,7 @@
      boot
      ------------------------------------------------------------------ */
   posters();
+  songs();
   Doodle.decorate(document);
   collage(document);
   barcodes(document);

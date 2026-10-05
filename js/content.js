@@ -1,11 +1,12 @@
 /* ==========================================================================
    content.js — edit your info here.
-   Facts below were taken from Kyro's résumé notes (简历素材库.md, 简历.docx).
+   Facts below come from Kyro's résumé notes.
    Double-check anything marked  // CHECK  before publishing.
    ========================================================================== */
 window.SITE = {
   name: 'Kyro Zhao',
-  email: 'BoxinZhao619@163.com',          // CHECK: the email you want recruiters to use
+  email: 'boxinzhao619@gmail.com',
+  instagram: 'https://www.instagram.com/kyrozzzhao/',
   linkedin: '',                           // CHECK: paste your LinkedIn URL to show the button
   resume: 'assets/Kyro_Zhao_Resume.pdf',  // CHECK: drop your PDF résumé at this path
 
@@ -108,24 +109,46 @@ window.SITE = {
       ],
       outcome: ['Top 3 tutor in student satisfaction (first-cycle review)'],
       tools: ['Curriculum design', 'Coaching', 'Cross-cultural communication']
+    }
+  ],
+
+  /* ---------- ORIGINAL MUSIC (shown first in Case Files) ---------- */
+  songs: [
+    {
+      id: 'paradise',
+      title: 'Paradise',
+      file: 'assets/music/paradise.mp3',
+      cover: 'assets/covers/paradise.jpg',
+      tagline: 'If you could already see the danger behind the sweetness, would you still taste this fatal temptation with me?',
+      credits: [
+        ['Vocals', 'Kyro'], ['Lyrics', 'Kyro'], ['Composition', 'Kyro'],
+        ['Arrangement', 'Zheng He, Kyro'], ['Mixing & mastering', 'RSS Studios']
+      ],
+      tags: ['Phrygian dominant', 'African percussion', 'Trap', 'Rap + vocals'],
+      story: [
+        'Paradise is a descent you can’t resist and can’t win: a psychological game of desire, struggle and surrender.',
+        'The Phrygian dominant scale gives the song its mysterious, predatory edge. Every note is a silky line with a threat hidden inside, tightening as the emotion builds. African percussion is the heartbeat: raw, primal drums fused with trap create a rhythm that is wild and dangerous, seductive but feral, like a ritual from somewhere dark.',
+        'From the reckless rap of the opening to the whispered spell of the pre-chorus, you slowly lose your grip and step toward the edge. When the chorus breaks, the melody coils around you like a snake and there is no way out. “Swallow you in one gulp like a viper.”',
+        'Kyro’s voice is dangerous, lethal and addictive. Once you cross the red line and taste the forbidden fruit, there is no turning back. You surrender willingly to the trap and sink completely into Paradise.'
+      ]
     },
     {
-      id: 'vinyl-to-value',
-      style: 'collage',
-      kicker: 'Music Rights',
-      title: 'From Vinyl to Value',
-      role: 'Writer & designer · bilingual EN / 中文',
-      date: '2026.09',
-      hook: 'A bilingual explainer on why the music business is really a copyright business.',
-      metric: { n: 'EN/中', l: 'bilingual rights framework' },
-      context: 'Notes from Music Industry Law, rebuilt as a framework I could teach: from selling objects to selling rights.',
-      did: [
-        'Mapped tangible property (vinyl, CD, tape) against intellectual property (melodies, recordings).',
-        'Explained copyright as a “bundle of sticks” — every stick a separate right you can license.',
-        'Designed it as a hand-annotated, bilingual study sheet.'
+      id: 'take-my-heart-away',
+      title: 'Take My Heart Away',
+      file: 'assets/music/take-my-heart-away.mp3',
+      cover: 'assets/covers/take-my-heart-away.jpg',
+      tagline: 'Even if we live in different worlds, I will keep watching over you in my own way.',
+      credits: [
+        ['Vocals', 'Kyro'], ['Lyrics', 'Kyro, Junhao'], ['Composition', 'Kyro'],
+        ['Arrangement', 'Alex Tao, Kyro, Junhao'], ['Backing vocals', 'Kyro, Junhao'], ['Mixing & mastering', 'Alex Tao, Kyro']
       ],
-      outcome: ['Feeds straight into how I think about splits and ownership in Session Ledger.'],
-      tools: ['Copyright', 'IP framework', 'Bilingual writing']
+      tags: ['Ballad', 'Greek myth', 'Storytelling', 'Co-write'],
+      story: [
+        'Take My Heart Away is an eternal promise, and the courage to give everything for love.',
+        'Legend has it that Dionysus, the Greek god of wine, once spilled the wine of love onto a white rose. It soaked into the petals like blood; the white rose turned crimson and its fragrance filled the sky. A bee, drawn by the scent, fell deeply in love with the flower.',
+        'When Cupid reached out to pick the rose, the bee stung the god’s finger to protect it. Furious, Venus pulled out the bee’s stinger and tossed it into the flowerbed, where it took root in the rose’s stem and became its thorns.',
+        '“If my death can save your situation.” This is a conversation across souls, across life and death. Stripped of its sting, the bee found a new purpose: it became a knight, guarding the rose until the end of time.'
+      ]
     }
   ],
 
@@ -135,7 +158,7 @@ window.SITE = {
     about: ['headphones on, brain on ♪', 'jazz → R&B → C-pop → K-pop. no skips.', 'taught myself sax in one semester!'],
     work: ['business mode: ON', 'click a poster to open the case file!', 'numbers go up ↗'],
     tracklist: ['every job is a track ♫', 'side A: work. side B: school.', 'this one’s a banger →'],
-    lineup: ['now presenting… the lineup!', 'headliner: product thinking!', 'EN + 中文 = double album'],
+    lineup: ['now presenting… the lineup!', 'headliner: product thinking!', 'EN · Mandarin · Korean = triple album'],
     backstage: ['hire me? pretty please ♥', 'thanks for reading my diary!', 'say hi — I reply fast ✿'],
     travel: ['wheee!', 'coming!', 'wait for me!', 'next page →'],
     poke: ['hehe that tickles', 'boop!', 'I’m 64×64 pixels of hire-able', 'Berklee MB, class of 2028 ✶']
